@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><meta charset="utf-8">
+<title>Epicyclic Gearing</title>
+<link rel="icon" href="http://bl.ocks.org/favicon.png">
+<style>
+
+@import url("/style.css?20120730");
+
+header,
+footer {
+  color: #555;
+}
+
+a.gist {
+  color: #000;
+}
+
+</style>
+
+</head><body><header>
+  <a href="http://bl.ocks.org/mbostock">mbostock</a>’s block
+  <a class="gist" title="View gist #1353700 on GitHub" href="https://gist.github.com/mbostock/1353700">#1353700</a>
+  <span class="date">November 10, 2011</span>
+</header>
+
+<h1>Epicyclic Gearing</h1>
+
+
+<iframe src="blocks.org.Epicyclic%20Gearing_files/a.html" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+<p></p><aside><a style="position:relative;top:6px;" href="http://bl.ocks.org/mbostock/raw/1353700/" target="_blank">Open in a new window.</a></aside>
+
+
+<div class="gist-readme"><p>From <a href="http://en.wikipedia.org/wiki/Epicyclic_gearing">Wikipedia</a>:</p>
+
+<blockquote>
+  <p><strong>Epicyclic gearing</strong> or <strong>planetary gearing</strong> is a gear system consisting of one or more outer gears, or <em>planet</em> gears, revolving about a central, or <em>sun</em> gear. … Epicyclic gearing systems also incorporate the use of an outer ring gear or <em>annulus</em>, which meshes with the planet gears.</p>
+</blockquote>
+
+<p>Use the menu in the top-left to change the frame of reference, fixing the specified gear in-place.</p></div>
+
+<div class="gist-sources"><div class="gist-source"><h2>index.html<a href="#index.html" name="index.html">#</a></h2><pre><code class="html xml"><span class="doctype">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;<span class="title">meta</span> <span class="attribute">charset</span>=<span class="value">"utf-8"</span>&gt;</span>
+<span class="tag">&lt;<span class="title">style</span>&gt;</span><span class="css">
+
+<span class="tag">body</span> <span class="rules">{
+  <span class="rule"><span class="attribute">font-family</span>:<span class="value"> <span class="string">"Helvetica Neue"</span>, Helvetica, Arial, sans-serif</span>;</span>
+  <span class="rule"><span class="attribute">width</span>:<span class="value"> <span class="number">960</span>px</span>;</span>
+  <span class="rule"><span class="attribute">height</span>:<span class="value"> <span class="number">500</span>px</span>;</span>
+  <span class="rule"><span class="attribute">position</span>:<span class="value"> relative</span>;</span>
+<span class="rule">}</span></span>
+
+<span class="tag">form</span> <span class="rules">{
+  <span class="rule"><span class="attribute">position</span>:<span class="value"> absolute</span>;</span>
+  <span class="rule"><span class="attribute">top</span>:<span class="value"> <span class="number">1</span>em</span>;</span>
+  <span class="rule"><span class="attribute">left</span>:<span class="value"> <span class="number">1</span>em</span>;</span>
+<span class="rule">}</span></span>
+
+<span class="tag">path</span> <span class="rules">{
+  <span class="rule"><span class="attribute">fill-rule</span>:<span class="value"> evenodd</span>;</span>
+  <span class="rule"><span class="attribute">stroke</span>:<span class="value"> <span class="number">#333</span></span>;</span>
+  <span class="rule"><span class="attribute">stroke-width</span>:<span class="value"> <span class="number">2</span>px</span>;</span>
+<span class="rule">}</span></span>
+
+<span class="class">.sun</span> <span class="tag">path</span> <span class="rules">{
+  <span class="rule"><span class="attribute">fill</span>:<span class="value"> <span class="number">#6baed6</span></span>;</span>
+<span class="rule">}</span></span>
+
+<span class="class">.planet</span> <span class="tag">path</span> <span class="rules">{
+  <span class="rule"><span class="attribute">fill</span>:<span class="value"> <span class="number">#9ecae1</span></span>;</span>
+<span class="rule">}</span></span>
+
+<span class="class">.annulus</span> <span class="tag">path</span> <span class="rules">{
+  <span class="rule"><span class="attribute">fill</span>:<span class="value"> <span class="hexcolor">#c6dbef</span></span>;</span>
+<span class="rule">}</span></span>
+
+</span><span class="tag">&lt;/<span class="title">style</span>&gt;</span>
+<span class="tag">&lt;<span class="title">form</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"radio"</span> <span class="attribute">name</span>=<span class="value">"reference"</span> <span class="attribute">id</span>=<span class="value">"ref-annulus"</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">label</span> <span class="attribute">for</span>=<span class="value">"ref-annulus"</span>&gt;</span>Annulus<span class="tag">&lt;/<span class="title">label</span>&gt;</span><span class="tag">&lt;<span class="title">br</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"radio"</span> <span class="attribute">name</span>=<span class="value">"reference"</span> <span class="attribute">id</span>=<span class="value">"ref-planet"</span> <span class="attribute">checked</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">label</span> <span class="attribute">for</span>=<span class="value">"ref-planet"</span>&gt;</span>Planets<span class="tag">&lt;/<span class="title">label</span>&gt;</span><span class="tag">&lt;<span class="title">br</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">input</span> <span class="attribute">type</span>=<span class="value">"radio"</span> <span class="attribute">name</span>=<span class="value">"reference"</span> <span class="attribute">id</span>=<span class="value">"ref-sun"</span>&gt;</span>
+  <span class="tag">&lt;<span class="title">label</span> <span class="attribute">for</span>=<span class="value">"ref-sun"</span>&gt;</span>Sun<span class="tag">&lt;/<span class="title">label</span>&gt;</span>
+<span class="tag">&lt;/<span class="title">form</span>&gt;</span>
+<span class="tag">&lt;<span class="title">script</span> <span class="attribute">src</span>=<span class="value">"https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"</span>&gt;</span><span class="javascript"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+<span class="tag">&lt;<span class="title">script</span>&gt;</span><span class="javascript">
+
+<span class="keyword">var</span> width = <span class="number">960</span>,
+    height = <span class="number">500</span>,
+    radius = <span class="number">80</span>,
+    x = Math.sin(<span class="number">2</span> * Math.PI / <span class="number">3</span>),
+    y = Math.cos(<span class="number">2</span> * Math.PI / <span class="number">3</span>);
+
+<span class="keyword">var</span> offset = <span class="number">0</span>,
+    speed = <span class="number">4</span>,
+    start = Date.now();
+
+<span class="keyword">var</span> svg = d3.select(<span class="string">"body"</span>).append(<span class="string">"svg"</span>)
+    .attr(<span class="string">"width"</span>, width)
+    .attr(<span class="string">"height"</span>, height)
+  .append(<span class="string">"g"</span>)
+    .attr(<span class="string">"transform"</span>, <span class="string">"translate("</span> + width / <span class="number">2</span> + <span class="string">","</span> + height / <span class="number">2</span> + <span class="string">")scale(.55)"</span>)
+  .append(<span class="string">"g"</span>);
+
+<span class="keyword">var</span> frame = svg.append(<span class="string">"g"</span>)
+    .datum({radius: Infinity});
+
+frame.append(<span class="string">"g"</span>)
+    .attr(<span class="string">"class"</span>, <span class="string">"annulus"</span>)
+    .datum({teeth: <span class="number">80</span>, radius: -radius * <span class="number">5</span>, annulus: <span class="literal">true</span>})
+  .append(<span class="string">"path"</span>)
+    .attr(<span class="string">"d"</span>, gear);
+
+frame.append(<span class="string">"g"</span>)
+    .attr(<span class="string">"class"</span>, <span class="string">"sun"</span>)
+    .datum({teeth: <span class="number">16</span>, radius: radius})
+  .append(<span class="string">"path"</span>)
+    .attr(<span class="string">"d"</span>, gear);
+
+frame.append(<span class="string">"g"</span>)
+    .attr(<span class="string">"class"</span>, <span class="string">"planet"</span>)
+    .attr(<span class="string">"transform"</span>, <span class="string">"translate(0,-"</span> + radius * <span class="number">3</span> + <span class="string">")"</span>)
+    .datum({teeth: <span class="number">32</span>, radius: -radius * <span class="number">2</span>})
+  .append(<span class="string">"path"</span>)
+    .attr(<span class="string">"d"</span>, gear);
+
+frame.append(<span class="string">"g"</span>)
+    .attr(<span class="string">"class"</span>, <span class="string">"planet"</span>)
+    .attr(<span class="string">"transform"</span>, <span class="string">"translate("</span> + -radius * <span class="number">3</span> * x + <span class="string">","</span> + -radius * <span class="number">3</span> * y + <span class="string">")"</span>)
+    .datum({teeth: <span class="number">32</span>, radius: -radius * <span class="number">2</span>})
+  .append(<span class="string">"path"</span>)
+    .attr(<span class="string">"d"</span>, gear);
+
+frame.append(<span class="string">"g"</span>)
+    .attr(<span class="string">"class"</span>, <span class="string">"planet"</span>)
+    .attr(<span class="string">"transform"</span>, <span class="string">"translate("</span> + radius * <span class="number">3</span> * x + <span class="string">","</span> + -radius * <span class="number">3</span> * y + <span class="string">")"</span>)
+    .datum({teeth: <span class="number">32</span>, radius: -radius * <span class="number">2</span>})
+  .append(<span class="string">"path"</span>)
+    .attr(<span class="string">"d"</span>, gear);
+
+d3.selectAll(<span class="string">"input[name=reference]"</span>)
+    .data([radius * <span class="number">5</span>, Infinity, -radius])
+    .on(<span class="string">"change"</span>, <span class="function"><span class="keyword">function</span><span class="params">(radius1)</span> {</span>
+      <span class="keyword">var</span> radius0 = frame.datum().radius, angle = (Date.now() - start) * speed;
+      frame.datum({radius: radius1});
+      svg.attr(<span class="string">"transform"</span>, <span class="string">"rotate("</span> + (offset += angle / radius0 - angle / radius1) + <span class="string">")"</span>);
+    });
+
+d3.selectAll(<span class="string">"input[name=speed]"</span>)
+    .on(<span class="string">"change"</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span> {</span> speed = +<span class="keyword">this</span>.value; });
+
+<span class="function"><span class="keyword">function</span> <span class="title">gear</span><span class="params">(d)</span> {</span>
+  <span class="keyword">var</span> n = d.teeth,
+      r2 = Math.abs(d.radius),
+      r0 = r2 - <span class="number">8</span>,
+      r1 = r2 + <span class="number">8</span>,
+      r3 = d.annulus ? (r3 = r0, r0 = r1, r1 = r3, r2 + <span class="number">20</span>) : <span class="number">20</span>,
+      da = Math.PI / n,
+      a0 = -Math.PI / <span class="number">2</span> + (d.annulus ? Math.PI / n : <span class="number">0</span>),
+      i = -<span class="number">1</span>,
+      path = [<span class="string">"M"</span>, r0 * Math.cos(a0), <span class="string">","</span>, r0 * Math.sin(a0)];
+  <span class="keyword">while</span> (++i &lt; n) path.push(
+      <span class="string">"A"</span>, r0, <span class="string">","</span>, r0, <span class="string">" 0 0,1 "</span>, r0 * Math.cos(a0 += da), <span class="string">","</span>, r0 * Math.sin(a0),
+      <span class="string">"L"</span>, r2 * Math.cos(a0), <span class="string">","</span>, r2 * Math.sin(a0),
+      <span class="string">"L"</span>, r1 * Math.cos(a0 += da / <span class="number">3</span>), <span class="string">","</span>, r1 * Math.sin(a0),
+      <span class="string">"A"</span>, r1, <span class="string">","</span>, r1, <span class="string">" 0 0,1 "</span>, r1 * Math.cos(a0 += da / <span class="number">3</span>), <span class="string">","</span>, r1 * Math.sin(a0),
+      <span class="string">"L"</span>, r2 * Math.cos(a0 += da / <span class="number">3</span>), <span class="string">","</span>, r2 * Math.sin(a0),
+      <span class="string">"L"</span>, r0 * Math.cos(a0), <span class="string">","</span>, r0 * Math.sin(a0));
+  path.push(<span class="string">"M0,"</span>, -r3, <span class="string">"A"</span>, r3, <span class="string">","</span>, r3, <span class="string">" 0 0,0 0,"</span>, r3, <span class="string">"A"</span>, r3, <span class="string">","</span>, r3, <span class="string">" 0 0,0 0,"</span>, -r3, <span class="string">"Z"</span>);
+  <span class="keyword">return</span> path.join(<span class="string">""</span>);
+}
+
+d3.timer(<span class="function"><span class="keyword">function</span><span class="params">()</span> {</span>
+  <span class="keyword">var</span> angle = (Date.now() - start) * speed,
+      transform = <span class="function"><span class="keyword">function</span><span class="params">(d)</span> {</span> <span class="keyword">return</span> <span class="string">"rotate("</span> + angle / d.radius + <span class="string">")"</span>; };
+  frame.selectAll(<span class="string">"path"</span>).attr(<span class="string">"transform"</span>, transform);
+  frame.attr(<span class="string">"transform"</span>, transform); <span class="comment">// frame of reference</span>
+});
+
+</span><span class="tag">&lt;/<span class="title">script</span>&gt;</span>
+</code></pre></div></div>
+
+<script src="a_data/d3.js"></script>
+<script src="blocks.org.Epicyclic%20Gearing_files/highlight.js"></script>
+<script>
+
+var gist = {"history":[{"version":"67a496e4b2cccbd53d2339083d4c92016f029333"}],"files":{"README.md":{"language":"Markdown","type":"text/plain","filename":"README.md","size":459,"sha":"0f6188e850d55631fc704e9e62756b403cc110c6"},"index.html":{"language":"HTML","type":"text/html","filename":"index.html","size":3779,"sha":"6f04b1a685549e2fd7cd68bbb782015247af4d6a"},"thumbnail.png":{"language":null,"type":"image/png","filename":"thumbnail.png","size":14574,"sha":"c9ed26af986771b51e9b6d1df06257e8fabc8af4"}},"created_at":"2011-11-10T00:39:13.000Z","updated_at":"2015-06-20T14:00:27.000Z","description":"Epicyclic Gearing","owner":{"login":"mbostock"},"id":"1353700"};
+
+var files = d3.values(gist.files)
+    .sort(function(a, b) { return (b.filename === "index.html") - (a.filename === "index.html") || a.filename.localeCompare(b.filename); });
+
+var readme = d3.selectAll(".gist-readme")
+    .data(files.filter(function(d) { return /^readme\b/i.test(d.filename) && d.language === "Markdown"; }))
+    .each(function(d) {
+      var readme = d3.select(this);
+      d3.text("/mbostock/raw/1353700/67a496e4b2cccbd53d2339083d4c92016f029333/" + d.filename, function(error, content) {
+        readme.html(new Showdown.converter().makeHtml(content));
+        readme.selectAll("code").each(function() { hljs.highlightBlock(this); });
+      });
+    });
+
+var source = d3.select(".gist-sources").selectAll(".gist-source")
+    .data(files.filter(function(d) { return !/^readme\b/i.test(d.filename) && d.size < 50000 && text(d.type); }))
+  .enter().append("div")
+    .attr("class", "gist-source");
+
+source.append("h2")
+    .text(function(d) { return d.filename; })
+  .append("a")
+    .attr("name", function(d) { return d.filename; })
+    .attr("href", function(d) { return "#" + d.filename; })
+    .text("#");
+
+source.append("pre").append("code")
+    .attr("class", function(d) { return d.language && (d.language === "JSON" ? "javascript" : d.language.toLowerCase()); })
+    .each(function(d) {
+      var code = d3.select(this);
+      d3.text("/mbostock/raw/1353700/67a496e4b2cccbd53d2339083d4c92016f029333/" + (d.filename === "index.html" ? "" : d.filename), function(error, content) {
+        code.text(content);
+        hljs.highlightBlock(code.node());
+      });
+    });
+
+function text(type) {
+  return /(^text\/)|(^application\/(javascript|json)$)|(^image\/svg$)|(\+xml$)/.test(type);
+}
+
+</script>
+
+<footer>
+  <a href="http://bl.ocks.org/mbostock">mbostock</a>’s block
+  <a class="gist" title="View gist #1353700 on GitHub" href="https://gist.github.com/mbostock/1353700">#1353700</a>
+  <span class="date">November 10, 2011</span>
+</footer>
+
+<script>
+
+GoogleAnalyticsObject = "ga", ga = function() { ga.q.push(arguments); }, ga.q = [], ga.l = +new Date;
+ga("create", "UA-48272912-1", "auto");
+ga("send", "pageview");
+
+</script>
+<script async="" src="blocks.org.Epicyclic%20Gearing_files/analytics.js"></script>
+</body></html>
